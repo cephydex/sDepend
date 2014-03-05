@@ -1,4 +1,3 @@
-
 Interpretation or importance of options to the sDepend plugin
 =============================================================
 
@@ -29,7 +28,7 @@ $('#yourControlID').sdepend('path/to/datasource', {
 
 
 The code below shows configuration of sDepend on a select element 
-that depend on values from a preceding element.
+that depends on values from a preceding element.
 
 <script type="text/javascript">
 
