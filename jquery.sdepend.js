@@ -261,5 +261,4 @@
    
 
 
-})(jQuery)})(jQuery)
 })(jQuery)
