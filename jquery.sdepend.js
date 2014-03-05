@@ -19,6 +19,7 @@
         dsPath += $.tappend;
         var jsonData = $.getDSet(dsPath, params.imgLoad);
         if(params.subKey && params.subKey !== ''){
+            jsonData = jsonData[params.subKey];
         }
 >>>>>>> FETCH_HEAD
         
@@ -261,3 +262,4 @@
 
 
 })(jQuery)})(jQuery)
+})(jQuery)
