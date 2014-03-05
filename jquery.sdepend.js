@@ -17,6 +17,8 @@
 =======
         //var keepSession = true;
         dsPath += $.tappend;
+        var jsonData = $.getDSet(dsPath, params.imgLoad);
+>>>>>>> FETCH_HEAD
         
         if(!params.fromQry || params.fromQry !== true){
             jsonData = $.hasSub(
