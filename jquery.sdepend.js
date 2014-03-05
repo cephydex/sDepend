@@ -10,9 +10,11 @@
      *Function to call on element to effect dependency or data set.
      */    
     $.fn.sdepend = function(dsPath, params){
+<<<<<<< HEAD
         dsPath += $.tappend;
         var jsonData = null;
         var tempData = null;
+=======
         
         if(!params.fromQry || params.fromQry !== true){
             jsonData = $.hasSub(
