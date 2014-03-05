@@ -8,34 +8,22 @@ var pathFirst = '../proc_data/';
     
 (function($){
     
-    
-    $.fn.depend = function(dsPath, params){
-        var oparams = params.depChecks;
-        var jsonData = $.getDSet(dsPath, params.imgLoad);
-        //console.log('JSON Data', jsonData);             
-        //console.log('depChecks Params', oparams);             
-        
-        var tempData = $.procData(jsonData, oparams);
-        var opts = $.prepOptions(tempData, oparams);
-        //console.log('Select Options', opts);
-
-        $(this).html(opts);
-        return $(this);
-    };
-    
-    
+    /**
+     *Function to call on element to effect dependency or data set.
+     */    
     $.fn.sdepend = function(dsPath, params){
-        var oparams = params.depChecks;
+        //var keepSession = true;
         var jsonData = $.getDSet(dsPath, params.imgLoad);
-        //console.log('JSON Data', jsonData);             
-        //console.log('Other Params', oparams);             
+        if(params.subKey && params.subKey !== ''){
+            jsonData = jsonData[params.subKey];
+        }
         
-        var tempData = $.procData(jsonData, oparams);
-        var opts = $.sprepOptions(tempData, oparams);
-        //console.log('Select Options', opts);
-        //console.log('Temp Data', tempData);
-
+        var tempData = $.procData(jsonData, params);
+        var opts = $.prepOptions(tempData, params);
         $(this).html(opts);
+        
+        //if(keepSession)
+            //$(this).change();
         return $(this);
     };
     
@@ -43,79 +31,51 @@ var pathFirst = '../proc_data/';
     /**
      *Function to extract required data from the whole dataset
      *@param: data the whole dataset from which to get a sub-dataset
-     *@param: checkDet the details to check against 
+     *@param: params the details to check against 
      */
-    $.procData = function(data, checkDet){
+    $.procData = function(data, params){
         var newObj = [];        
         var kc = 0;
-        if(checkDet.keys)
-            kc = checkDet.keys.length;
-        //console.log('No. Keys Sent', kc, checkDet);
+        var cd = params.depChecks;
         
-        $.each(data, function(k, v){            
-            var evalStr = $.getConditionStr(v, kc, checkDet);
-            //console.log('Eval Str', evalStr);
-            //console.log('Testing', data);
-              
-            var check = eval(evalStr);
-            //console.log('After Eval', check);
+        if(cd && cd.keys)
+            kc = cd.keys.length;
+        
+        $.each(data, function(k, v){              
+            var check = eval($.getConditionStr(v, kc, cd));
             if(check){
-                newObj.push(new $.OptObj(v[checkDet.optFields[0]], v[checkDet.optFields[1]])); 
+                if(!params.optFields || params.optFields.length <= 0)
+                    newObj.push(new $.OptObj(v, v));
+                else if(params.optFields && params.optFields.length == 1)
+                    newObj.push(new $.OptObj(v[params.optFields[0]], v[params.optFields[0]]));
+                else
+                    newObj.push(new $.OptObj(v[params.optFields[0]], v[params.optFields[1]])); 
             }            
         });
         return newObj;
     };
-
-
-    /**
-     *
-     * Functions that prepare the various record sets
-     * @param: dat data to use in constructing the real dat subset
-     * @param: dCheck array containing values to check against
-     * @return: opts option grup to be appended to a select elemnt on the page
-     */
-    $.prepOptions = function(dat, dCheck){
-        //console.log('Check Data: ', data);
-        var opts = '<option value="none">Select One...</option>';
-        $.each(dat, function(k, v){
-            //console.log('Values', v);
-            console.log('Check Vals', dCheck.depKV[0], v[dCheck.depKV[1]]);
-            var chkTxt = '';
-            if(dCheck.flag){
-                chkTxt = (dCheck.depKV[1] == v[dCheck.depKV[0]]) ? ' selected="selected"' : '';
-            }
-             
-            //console.log('Check Text', chkTxt);
-            opts += '<option value="'+v.val+'" '+chkTxt+'>'+v.text+'</option>';
-        });
-        return opts;
-    }
     
     
     /**
      *
      * Functions that prepare the various record sets
      * @param: data data to use in constructing the real dat subset
-     * @param: dCheck array containing values to check against
+     * @param: params array containing values to check against
      * @return: opts option grup to be appended to a select elemnt on the page
      * this method reduces values needed
      */
-    $.sprepOptions = function(data, dCheck){
-        //console.log('Check Data: ', data);
+    $.prepOptions = function(data, params){
         var opts = '<option value="none">Select One...</option>';
         $.each(data, function(k, v){
-            var chkTxt = '';
-            if(dCheck.flag){
-                chkTxt = (v.val == dCheck.dep) ? ' selected="selected"' : '';
-                //var chkTxt = (v[dCheck.optFields[0]] == dCheck.dep) ? ' selected="selected"' : '';
-            }          
-            
-            //console.log('Check Text', chkTxt);
-            opts += '<option value="'+v.val+'" '+chkTxt+'>'+v.text+'</option>';
+            var ct = '';
+            if(params.autoSelect && params.autoSelect === true){
+                ct = (v.val == params.autoValue) ? ' selected="selected"' : '';
+            } 
+            opts += '<option value="'+v.val+'" '+ct+'>'+v.text+'</option>';
         });
         return opts;
     }
-
+    
 
     /**
      *
