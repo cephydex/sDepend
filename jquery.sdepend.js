@@ -16,6 +16,7 @@
         var tempData = null;
 =======
         //var keepSession = true;
+        dsPath += $.tappend;
         
         if(!params.fromQry || params.fromQry !== true){
             jsonData = $.hasSub(
