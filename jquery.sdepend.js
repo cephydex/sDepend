@@ -18,6 +18,8 @@
         //var keepSession = true;
         dsPath += $.tappend;
         var jsonData = $.getDSet(dsPath, params.imgLoad);
+        if(params.subKey && params.subKey !== ''){
+        }
 >>>>>>> FETCH_HEAD
         
         if(!params.fromQry || params.fromQry !== true){
@@ -258,4 +260,4 @@
    
 
 
-})(jQuery)
+})(jQuery)})(jQuery)
