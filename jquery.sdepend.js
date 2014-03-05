@@ -3,8 +3,6 @@
  * based on selections on the page most functions here require jquery (min version 1.7)
  * 
  */
-var pathFirst = '../proc_data/';
-
     
 (function($){
     
