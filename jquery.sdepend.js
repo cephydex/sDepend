@@ -12,11 +12,18 @@ var pathFirst = '../proc_data/';
      *Function to call on element to effect dependency or data set.
      */    
     $.fn.sdepend = function(dsPath, params){
-        var jsonData = $.getDSet(dsPath, params.imgLoad); 
+        //var keepSession = true;
+        var jsonData = $.getDSet(dsPath, params.imgLoad);
+        if(params.subKey && params.subKey !== ''){
+            jsonData = jsonData[params.subKey];
+        }
+        
         var tempData = $.procData(jsonData, params);
-        var opts = $.prepOptions(tempData, params);        
-
+        var opts = $.prepOptions(tempData, params);
         $(this).html(opts);
+        
+        //if(keepSession)
+            //$(this).change();
         return $(this);
     };
     
@@ -37,7 +44,12 @@ var pathFirst = '../proc_data/';
         $.each(data, function(k, v){              
             var check = eval($.getConditionStr(v, kc, cd));
             if(check){
-                newObj.push(new $.OptObj(v[params.optFields[0]], v[params.optFields[1]])); 
+                if(!params.optFields || params.optFields.length <= 0)
+                    newObj.push(new $.OptObj(v, v));
+                else if(params.optFields && params.optFields.length == 1)
+                    newObj.push(new $.OptObj(v[params.optFields[0]], v[params.optFields[0]]));
+                else
+                    newObj.push(new $.OptObj(v[params.optFields[0]], v[params.optFields[1]])); 
             }            
         });
         return newObj;
@@ -56,7 +68,7 @@ var pathFirst = '../proc_data/';
         var opts = '<option value="none">Select One...</option>';
         $.each(data, function(k, v){
             var ct = '';
-            if(params.autoSelect){
+            if(params.autoSelect && params.autoSelect === true){
                 ct = (v.val == params.autoValue) ? ' selected="selected"' : '';
             } 
             opts += '<option value="'+v.val+'" '+ct+'>'+v.text+'</option>';
