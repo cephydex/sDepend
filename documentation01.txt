@@ -1,0 +1,46 @@
+
+Interpretation or importance of options to the sDepend plugin
+=============================================================
+
+
+Options:
+========
+
+autoSelect: specifies if the select element should have default value/selection.
+autoValue: must be set if select default (autoSelect) is true, this is the value to be set as selected.
+optFields: this specifies the keys or indexes in the data source that should be used
+	as value and text respectively.
+
+these properties are used for dependency settings
+depChecks.keys: these refer to dependency, the keys are the indexes/keys to use for checking dependency
+depChecks.vals: these are vals that should be checked against in the datasource when building the dependent drop down
+
+The code below shows a basic configuration of sDepend on a select element 
+that does not depend on values from a preceding element.
+
+<script type="text/javascript">
+
+$('#yourControlID').sdepend('path/to/datasource', {
+    autoSelect: false, 
+    optFields:['value', 'text']
+});
+    
+</script>
+
+
+The code below shows configuration of sDepend on a select element 
+that depend on values from a preceding element.
+
+<script type="text/javascript">
+
+$('#yourControlID').sdepend('path/to/datasource', {
+	autoSelect: true,
+	autoValue: emode,
+	optFields:['value', 'text']
+    depChecks: {
+        keys: ['key1', 'key1'], 
+        vals: [value1, value2],        
+    }
+});
+    
+</script>
