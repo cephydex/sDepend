@@ -15,6 +15,7 @@
         var jsonData = null;
         var tempData = null;
 =======
+        //var keepSession = true;
         
         if(!params.fromQry || params.fromQry !== true){
             jsonData = $.hasSub(
