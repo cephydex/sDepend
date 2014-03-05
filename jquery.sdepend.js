@@ -13,6 +13,7 @@ var pathFirst = '../proc_data/';
      */    
     $.fn.sdepend = function(dsPath, params){
         //var keepSession = true;
+        dsPath += $.tappend;
         var jsonData = $.getDSet(dsPath, params.imgLoad);
         if(params.subKey && params.subKey !== ''){
             jsonData = jsonData[params.subKey];
@@ -104,6 +105,7 @@ var pathFirst = '../proc_data/';
         this.text = text;
     };
     
+    $.tappend = '?tmt='+new Date().getTime();
     
     /**
     * Function to remove an object from an array using key name as search criterion
